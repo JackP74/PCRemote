@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F4FCDF34-D97F-4B3F-960F-932186E76D60}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TemplateGuid>{6968b3a4-1835-46a3-ac5c-1ae33b475983}</TemplateGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PcRemote.Droid</RootNamespace>
+    <AssemblyName>PcRemote.Android</AssemblyName>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidManagedSymbols>true</AndroidManagedSymbols>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>D:\main.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>014756Ff</AndroidSigningStorePass>
+    <AndroidSigningKeyPass>014756Ff</AndroidSigningKeyPass>
+    <AndroidSigningKeyAlias>PeterJ74</AndroidSigningKeyAlias>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <MandroidI18n />
+    <AndroidDexTool>dx</AndroidDexTool>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+    <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Tabbar.xml" />
+    <AndroidResource Include="Resources\layout\Toolbar.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\drawable\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\launcher_round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\launcher_round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\launcher_round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PcRemote\PcRemote.csproj">
+      <Project>{23bff9ae-7c87-47d4-8efa-bddebb6641da}</Project>
+      <Name>PcRemote</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+</Project>

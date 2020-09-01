@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="d"
+            xmlns:views="clr-namespace:PcRemote.Views"
+            x:Class="PcRemote.Views.MainPage"
+            BackgroundColor="{Binding BackGround}">
+
+    <TabbedPage.Children>
+        <NavigationPage Title="Main">
+            <x:Arguments>
+                <views:ServerPage />
+            </x:Arguments>
+        </NavigationPage>
+
+        <NavigationPage Title="PMedia">
+            <x:Arguments>
+                <views:PmpPage />
+            </x:Arguments>
+        </NavigationPage>
+
+        <NavigationPage Title="Raw">
+            <x:Arguments>
+                <views:RawPage />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+    
+</TabbedPage>
