@@ -85,6 +85,22 @@
                         Padding="0,0,0,0"
                         Clicked="VolumeDown_Clicked"
                         BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Screen On" 
+                        Grid.Column="0"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="ScreenOn_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Screen Off" 
+                        Grid.Column="1"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="ScreenOff_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

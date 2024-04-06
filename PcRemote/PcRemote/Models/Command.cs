@@ -18,4 +18,14 @@
             this.Text = Text;
         }
     }
+
+    class ScreenImage
+    {
+        public byte[] Image { get; set; }
+
+        public ScreenImage(byte[] Image)
+        {
+            this.Image = Image;
+        }
+    }
 }

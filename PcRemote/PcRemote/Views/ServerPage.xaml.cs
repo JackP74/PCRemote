@@ -52,12 +52,22 @@ namespace PcRemote.Views
 
         void VolumeUp_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "NewCommand", new ServerCommand("volume up 5"));
+            MessagingCenter.Send(this, "NewCommand", new ServerCommand("volume up"));
         }
 
         void VolumeDown_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "NewCommand", new ServerCommand("volume down 5"));
+            MessagingCenter.Send(this, "NewCommand", new ServerCommand("volume down"));
+        }
+
+        private void ScreenOn_Clicked(object sender, EventArgs e)
+        {
+            MessagingCenter.Send(this, "NewCommand", new ServerCommand("screen on"));
+        }
+
+        private void ScreenOff_Clicked(object sender, EventArgs e)
+        {
+            MessagingCenter.Send(this, "NewCommand", new ServerCommand("screen off"));
         }
     }
 }

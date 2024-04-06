@@ -37,11 +37,10 @@ namespace PcRemote.Classes
         {
             MemoryStream Stream = new MemoryStream();
             BinaryWriter Writer = new BinaryWriter(Stream, Encoding.UTF8);
-            byte Current = 0;
             Writer.Write(Convert.ToByte(data.Length));
             for (int I = 0; I <= data.Length - 1; I++)
             {
-                Current = Table[data[I].GetType()];
+                byte Current = Table[data[I].GetType()];
                 Writer.Write(Current);
                 switch (Current)
                 {

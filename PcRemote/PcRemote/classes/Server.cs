@@ -5,31 +5,38 @@ using System.Timers;
 using System.Linq;
 using System.IO;
 using System.Drawing;
-using Plugin.FilePicker;
-
 using PcRemote.Models;
 using PcRemote.Classes;
 
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
+
 namespace PcRemote.classes
 {
+    public static class ServerGlobals
+    {
+        public static bool IsConnected = false;
+        public static bool IsConnecting = false;
+    }
+
     class Server
     {
         #region "variables"
-        System.Timers.Timer MsgTimer;
+        private readonly Timer MsgTimer;
+        private readonly Timer MsgReconnect;
 
         private UserClient User;
-        private Pack Packer;
+        private readonly Pack Packer;
         private ICryptoTransform Encryptor;
         private ICryptoTransform Decryptor;
         private byte[] PublicKey;
-        private readonly string Auth = "%auth%";
-        private readonly string FinalAuth = "%finalauth%";
-        List<ServerCommand> Commands;
+        private readonly string Auth = "36OQoMfudmRV5aCljCRnV1Zg72tZUH";
+        private readonly string FinalAuth = "oPd4B0P8WA4l3z6TQrY7";
+        private readonly List<ServerCommand> Commands;
         bool SecureConnection = false;
-
-        private const string Host = "%host%";
-        private const int Port = %port%;
-        private bool ForReconnect = false;
+        
+        private const string Host = "privateserver.dynu.net";
+        private const int Port = 504;
 
         private readonly Random random = new Random(Guid.NewGuid().GetHashCode());
         #endregion
@@ -41,12 +48,12 @@ namespace PcRemote.classes
         public delegate void NewMessageEventHandler(string Message);
         public event NewMessageEventHandler NewMessage;
 
-        public delegate void NewImageEventHandler(System.Drawing.Image Message);
+        public delegate void NewImageEventHandler(byte[] NewImage);
         public event NewImageEventHandler NewImage;
         #endregion
 
         #region "proprieties"
-        private RSACryptoServiceProvider RSA1 { get; set; } = new RSACryptoServiceProvider(2048);
+        private RSACryptoServiceProvider RSA { get; set; } = new RSACryptoServiceProvider(2048);
         #endregion
 
         #region "enums"
@@ -55,7 +62,6 @@ namespace PcRemote.classes
             Chatter = 0,
             Authorize = 2,
             HandShake = 3,
-            Image = 4,
             FileTransfer = 7,
         }
         #endregion
@@ -73,11 +79,15 @@ namespace PcRemote.classes
 
             User.KeepAlive = true;
             User.BufferSize = 32768;
-            User.MaxPacketSize = 1048576;
+            User.MaxPacketSize = 104857600;
 
-            MsgTimer = new System.Timers.Timer { Interval = 100 };
+            MsgTimer = new Timer { Interval = 100 };
             MsgTimer.Elapsed += MsgTimer_Elapsed;
             MsgTimer.Start();
+
+            MsgReconnect = new Timer { Interval = 2000 };
+            MsgReconnect.Elapsed += MsgReconnect_Elapsed;
+            MsgReconnect.Start();
         }
 
         private string RandomString(int Length)
@@ -94,12 +104,47 @@ namespace PcRemote.classes
 
         public void ConnectToServer()
         {
+            ServerGlobals.IsConnecting = true;
+
+            if (User == null)
+            {
+                User = new UserClient();
+
+                User.ReadPacket += User_ReadPacket;
+                User.ExceptionThrown += User_ExceptionThrown;
+                User.StateChanged += User_StateChanged;
+
+                User.KeepAlive = true;
+                User.BufferSize = 32768;
+                User.MaxPacketSize = 104857600;
+            }
+
             User.Connect(Host, Port);
         }
 
         public void DisconnectFromServer()
         {
-            User.Disconnect();
+            try
+            {
+                User.Disconnect();
+            }
+            catch
+            {
+                User.Dispose();
+
+                User = new UserClient();
+
+                User.ReadPacket += User_ReadPacket;
+                User.ExceptionThrown += User_ExceptionThrown;
+                User.StateChanged += User_StateChanged;
+
+                User.KeepAlive = true;
+                User.BufferSize = 32768;
+                User.MaxPacketSize = 104857600;
+            }
+
+            ServerGlobals.IsConnecting = false;
+            ServerGlobals.IsConnected = false;
         }
 
         private byte[] Encrypt(byte[] Data) => Encryptor.TransformFinalBlock(Data, 0, Data.Length);
@@ -123,46 +168,31 @@ namespace PcRemote.classes
 
         private void SendHandshakePacket(byte[] Data)
         {
-            SendPacket(Convert.ToByte(PackHeader.HandShake), Data);
+            SendPacket(Convert.ToByte(PackHeader.HandShake), Data, "server");
         }
 
-        private void SendChatterPacket(string Message)
+        public void SendChatterPacket(string Message)
         {
             SendPacket(Convert.ToByte(PackHeader.Chatter), Message, FinalAuth);
         }
 
-        private void SendImagePacket(Bitmap Message)
+        public void SendFileTransferPacket(byte[] FileData, string FileName)
         {
-            Byte[] MessageByte = ImageToByte(Message);
-
-            SendPacket(Convert.ToByte(PackHeader.Chatter), MessageByte, FinalAuth);
-        }
-
-        private void SendFileTransferPacket(string FilePath)
-        {
-            string FileName = new FileInfo(FilePath).Name;
-            byte[] FileData = File.ReadAllBytes(FilePath);
-
-            SendPacket(Convert.ToByte(PackHeader.FileTransfer), FileName, FileData);
-        }
-
-        private void SendFileTransferPacket(byte[] FileData, string FileName)
-        {
-            SendChatterPacket("this");
             SendPacket(Convert.ToByte(PackHeader.FileTransfer), FileName, FileData);
         }
 
         private void HandleHandshakePacket(object[] Values)
         {
             PublicKey = (byte[])Values[1];
-            RSA1 = new RSACryptoServiceProvider(2048);
-            RSA1.ImportCspBlob(PublicKey);
+            RSA = new RSACryptoServiceProvider(2048);
+            RSA.ImportCspBlob(PublicKey);
             RijndaelManaged R = new RijndaelManaged();
             Encryptor = R.CreateEncryptor();
             Decryptor = R.CreateDecryptor();
             byte[] Data = Packer.Serialize(R.Key, R.IV);
-            Data = RSA1.Encrypt(Data, true);
+            Data = RSA.Encrypt(Data, true);
             SendHandshakePacket(Data);
+
             SecureConnection = true;
         }
 
@@ -173,38 +203,9 @@ namespace PcRemote.classes
                 string Message = (string)Values[1];
                 NewMessage?.Invoke(Message);
             }
-            catch (Exception ex)
+            catch
             {
                 // Error
-            }
-        }
-
-        private void HandleImagePacket(object[] Values)
-        {
-            try
-            {
-                Byte[] Message = (Byte[])Values[1];
-
-                Int32 Width = (Int32)Values[2];
-                Int32 Height = (Int32)Values[3];
-
-                //Int32 R = (Int32)Values[4];
-                //Int32 G = (Int32)Values[5];
-                //Int32 B = (Int32)Values[6];
-
-                System.Drawing.Image MessageImg = ByteToImage(Message, Width, Height);
-
-                //
-
-                //Int32 RealR = MessageImg.GetPixel(30, 30).R;
-                //Int32 RealG = MessageImg.GetPixel(30, 30).R;
-                //Int32 RealB = MessageImg.GetPixel(30, 30).R;
-
-                NewImage?.Invoke(MessageImg);
-            }
-            catch (Exception ex)
-            {
-                NewMessage?.Invoke(ex.Message);
             }
         }
 
@@ -213,25 +214,49 @@ namespace PcRemote.classes
             string fileName = Values[1].ToString();
             byte[] fileData = (byte[])Values[2];
 
-            var pathToDownloads = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + @"/PcRemoteDownloads";
-
-            if (!Directory.Exists(pathToDownloads))
-                Directory.CreateDirectory(pathToDownloads);
-
-            string pathToFile = pathToDownloads + @"/" + fileName;
-
-            for (; ; )
+            if (fileName == "screencapture.jpg")
             {
-                if (!File.Exists(pathToFile))
-                    break;
-
-                pathToFile = pathToDownloads + @"/" + RandomString(3) + @"-" + fileName;
+                NewImage?.Invoke(fileData);
             }
+            else
+            {
+                var pathToDownloads = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + @"/PcRemoteDownloads";
 
-            File.WriteAllBytes(pathToFile, fileData);
+                if (!Directory.Exists(pathToDownloads))
+                    Directory.CreateDirectory(pathToDownloads);
+
+                string pathToFile = pathToDownloads + @"/" + fileName;
+
+                for (; ; )
+                {
+                    if (!File.Exists(pathToFile))
+                        break;
+
+                    pathToFile = pathToDownloads + @"/" + RandomString(3) + @"-" + fileName;
+                }
+
+                File.WriteAllBytes(pathToFile, fileData);
+            }
+        }
+
+        private void SendFileAsync()
+        {
+            try
+            {
+                FileData fileData = CrossFilePicker.Current.PickFile().Result;
+
+                string fileName = fileData.FileName;
+                byte[] contents = fileData.DataArray;
+
+                SendFileTransferPacket(contents, fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception choosing file: " + ex.ToString());
+            }
         }
         #endregion
-        
+
         #region "handles"
         private void User_ReadPacket(UserClient Sender, byte[] Data)
         {
@@ -242,7 +267,7 @@ namespace PcRemote.classes
             }
             catch
             {
-               User.Disconnect();
+                DisconnectFromServer();
             }
 
             object[] Values = Packer.Deserialize(Data);
@@ -258,10 +283,6 @@ namespace PcRemote.classes
                     HandleHandshakePacket(Values);
                     break;
 
-                case PackHeader.Image:
-                    HandleImagePacket(Values);
-                    break;
-
                 case PackHeader.FileTransfer:
                     HandleFileTransferPacket(Values);
                     break;
@@ -270,19 +291,13 @@ namespace PcRemote.classes
 
         private void User_ExceptionThrown(UserClient Sender, Exception Ex)
         {
-            try
-            {
-                User.Disconnect();
-                User.Dispose();
-            }
-            catch { }
+            DisconnectFromServer();
+
             PublicKey = null;
-            RSA1 = new RSACryptoServiceProvider(2048);
+            RSA = new RSACryptoServiceProvider(2048);
             SecureConnection = false;
-            User.KeepAlive = true;
-            User.BufferSize = 32768;
-            User.MaxPacketSize = 1048576;
-            ForReconnect = true;
+
+            ServerGlobals.IsConnecting = false;
         }
 
         private void User_StateChanged(UserClient Sender, bool Connected)
@@ -290,20 +305,22 @@ namespace PcRemote.classes
             if (Connected == true)
             {
                 SendAuthorizePacket(Auth);
+                ServerGlobals.IsConnected = true;
             }
             else
             {
-                PublicKey = null;
-                RSA1 = new RSACryptoServiceProvider(2048);
-                SecureConnection = false;
-                User.KeepAlive = true;
-                User.BufferSize = 32768;
-                User.MaxPacketSize = 1048576;
-                User.Connect(Host, Port);
+                if (!ServerGlobals.IsConnected && !ServerGlobals.IsConnecting)
+                {
+                    PublicKey = null;
+                    RSA = new RSACryptoServiceProvider(2048);
+                    SecureConnection = false;
+
+                    User.Connect(Host, Port);
+                    ServerGlobals.IsConnecting = true;
+                }
             }
 
             StateChanged?.Invoke(Connected);
-
         }
 
         private void MsgTimer_Elapsed(object sender, ElapsedEventArgs E)
@@ -312,76 +329,25 @@ namespace PcRemote.classes
             {
                 ServerCommand commandToSend = Commands[0];
                 Commands.RemoveAt(0);
-                
+
                 // W.I.P
-                //if(string.IsNullOrWhiteSpace(commandToSend.Text) == false)
+                if (string.IsNullOrWhiteSpace(commandToSend.Text) == false)
 
-                //    if (commandToSend.Text.Trim().ToLower() == "sendfile")
-                //    {
+                if (commandToSend.Text.Trim().ToLower() == "sendfile")
+                {
+                    SendFileAsync();
+                    return;
+                }
 
-                //        Thread sendThread = new Thread(async () =>
-                //            {
-                //                var file = await CrossFilePicker.Current.PickFile();
-
-                //                SendChatterPacket(file.FileName);
-
-                //                //var result = file.Result;
-
-                //                //SendFileTransferPacket(result.DataArray, result.FileName);
-                //            });
-
-                //        Task task = new Task(async () => {
-                //            var file = await CrossFilePicker.Current.PickFile();
-
-                //            SendChatterPacket(file.FileName);
-                //        });
-
-                //        //var file = CrossFilePicker.Current.PickFile();
-
-                //        //SendChatterPacket(file.Result.FileName);
-
-                //        return;
-                //    }
-
-                    SendChatterPacket(commandToSend.Text);
+                SendChatterPacket(commandToSend.Text);
             }
         }
 
-        private Byte[] ImageToByte(Bitmap ToConvert)
+        private void MsgReconnect_Elapsed(object sender, ElapsedEventArgs E)
         {
-            //ByteBuffer byteBuffer = ByteBuffer.Allocate(ToConvert.ByteCount);
-
-            //ToConvert.CopyPixelsToBuffer(byteBuffer);
-
-            //byte[] bytes = byteBuffer.ToArray<byte>();
-
-            //return bytes;
-
-            MemoryStream ms = new MemoryStream();
-            ToConvert.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            return ms.ToArray();
-
+            if (!ServerGlobals.IsConnected && !ServerGlobals.IsConnecting)
+                ConnectToServer();
         }
-
-        private System.Drawing.Image ByteToImage(Byte[] ToConvert, Int32 Width, Int32 Height)
-        {
-            //Bitmap finalImage = BitmapFactory.DecodeByteArray(ToConvert, 0, ToConvert.Length);
-
-            //ByteBuffer byteBuffer = ByteBuffer.Wrap(ToConvert);
-
-            //byteBuffer.Rewind();
-
-            //Bitmap Image = Bitmap.CreateBitmap(Width, Height, Bitmap.Config.Argb8888);
-
-            //Image.CopyPixelsFromBuffer(byteBuffer);
-
-            //return Image;
-
-            MemoryStream ms = new MemoryStream(ToConvert);
-            System.Drawing.Image returnImage = System.Drawing.Image.FromStream(ms);
-            return returnImage;
-        }
-
         #endregion
     }
 }

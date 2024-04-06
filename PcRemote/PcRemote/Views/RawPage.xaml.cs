@@ -31,26 +31,6 @@ namespace PcRemote.Views
             });
         }
 
-        private async Task SendFileAsync()
-        {
-            try
-            {
-                FileData fileData = await CrossFilePicker.Current.PickFile();
-
-                string fileName = fileData.FileName;
-                string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
-
-                System.Console.WriteLine("File name chosen: " + fileName);
-                System.Console.WriteLine("File data: " + contents);
-
-                Debug.WriteLine(fileName);
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine("Exception choosing file: " + ex.ToString());
-            }
-        }
-
         void RawCommand_Clicked(object sender, EventArgs e)
         {
             if(!string.IsNullOrWhiteSpace(txtRawInput.Text)) { 
@@ -58,24 +38,11 @@ namespace PcRemote.Views
                 {
                     foreach(string item in txtRawInput.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
                     {
-                        if (string.IsNullOrWhiteSpace(item)) continue;
-
-                        if (item.ToLower().Trim() == "sendfile")
-                        {
-                            Task task = new Task(() => { _ = SendFileAsync(); });
-                            task.Start();
-                        }
-
                         MessagingCenter.Send(this, "NewCommand", new ServerCommand(item));
                     }
                 }
                 else
                 {
-                    if (txtRawInput.Text.ToLower().Trim() == "sendfile")
-                    {
-                        Task task = new Task(() => { _ = SendFileAsync(); });
-                        task.Start();
-                    }
                     MessagingCenter.Send(this, "NewCommand", new ServerCommand(txtRawInput.Text));
                 }
 
