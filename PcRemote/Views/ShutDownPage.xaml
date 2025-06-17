@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PcRemote.Views.ShutDownPage">
+    
+  <ContentView.Content>
+        <StackLayout>
+            <Grid RowSpacing="0"
+                  ColumnSpacing="0">
+
+                <Grid.ColumnDefinitions>
+                    
+                    <ColumnDefinition Width="*" />
+                    
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    
+                </Grid.RowDefinitions>
+
+                <Label Text="ShutDown Command"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="15,15,0,50"
+                       FontSize="Large"
+                       HorizontalOptions="Center"/>
+                
+                <Grid Grid.Row="1"
+                      Grid.Column="0"
+                      RowSpacing="0"
+                      ColumnSpacing="0">
+                    
+                    <Grid.ColumnDefinitions>
+                        
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        
+                        <RowDefinition Height="*" />
+                        
+                    </Grid.RowDefinitions>
+
+                    <Label Text="In" 
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           FontSize="Large"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End"/>
+
+                    <Switch x:Name="ChkMode"
+                            IsToggled="false" 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="Center"/>
+
+                    <Label Text="At" 
+                           Grid.Row="0"
+                           Grid.Column="2"
+                           FontSize="Large"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"/>
+
+                </Grid>
+                
+                
+                
+            </Grid>
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>

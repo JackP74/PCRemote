@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tt="clr-namespace:TouchTracking" xmlns:local="clr-namespace:PcRemote"
+             x:Class="PcRemote.Views.ImagePage">
+    
+    <ContentPage.Content>
+        <Grid x:Name="MainGrid"
+            VerticalOptions="FillAndExpand" 
+            HorizontalOptions="FillAndExpand"
+            SizeChanged="MainGrid_SizeChanged">
+            
+            <Grid.Effects>
+                <tt:TouchEffect Capture="True" TouchAction="TouchEffect_TouchAction" />
+            </Grid.Effects>
+            
+            <!--<ffimageloading:CachedImage
+                x:Name="ImgMainFF"
+                VerticalOptions="FillAndExpand" 
+                HorizontalOptions="FillAndExpand"
+			    DownsampleToViewSize="True"
+                FadeAnimationEnabled="False"
+                Source="{Binding Image}" />-->
+
+            <AbsoluteLayout x:Name="NormalOverlayBtns"
+                            VerticalOptions="FillAndExpand" 
+                            HorizontalOptions="FillAndExpand"
+                            IsVisible="True">
+
+                <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                      AbsoluteLayout.LayoutBounds="1, 1, 100, 80" >
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="BtnRightClick"
+                            Text="☰"
+                            WidthRequest="50"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnRightClick_Clicked"/>
+
+                    <Button x:Name="BtnKeyboard"
+                            Text="⚷"
+                            WidthRequest="50"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKeyboard_Clicked"/>
+
+                    <Button x:Name="BtnClick"
+                            Text="⊕"
+                            WidthRequest="50"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnClick_Clicked"/>
+
+                    <Button x:Name="BtnDoubleClick"
+                            Text="⊕⊕"
+                            WidthRequest="50"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnDoubleClick_Clicked"/>
+                </Grid>
+            </AbsoluteLayout>
+
+            <AbsoluteLayout x:Name="KeyboardOverlayBtns"
+                            VerticalOptions="FillAndExpand" 
+                            HorizontalOptions="FillAndExpand"
+                            IsVisible="False">
+
+                <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                      AbsoluteLayout.LayoutBounds="0, 1, AutoSize, AutoSize" 
+                      WidthRequest="{Binding MaxWidth}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- First Row -->
+                    <Button x:Name="BtnQ"
+                            Text="Q"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnW"
+                            Text="W"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnE"
+                            Text="E"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnR"
+                            Text="R"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnT"
+                            Text="T"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnY"
+                            Text="Y"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="5"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnU"
+                            Text="U"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="6"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnI"
+                            Text="I"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="7"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnO"
+                            Text="O"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="8"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnP"
+                            Text="P"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="9"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnBackSpace"
+                            Text="BkSpace"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="10"
+                            Grid.ColumnSpan="2"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnBackSpace_Clicked"/>
+
+                    <Button x:Name="Btn7"
+                            Text="7"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="12"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn8"
+                            Text="8"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="13"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn9"
+                            Text="9"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.Column="14"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+                    <!-- /First Row -->
+
+                    <!-- Second Row -->
+                    <Button x:Name="BtnA"
+                            Text="A"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnS"
+                            Text="S"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnD"
+                            Text="D"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnF"
+                            Text="F"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnG"
+                            Text="G"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="4"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnH"
+                            Text="H"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="5"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnJ"
+                            Text="J"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="6"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnK"
+                            Text="K"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="7"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnL"
+                            Text="L"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="8"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnEnter"
+                            Text="Enter"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="9"
+                            Grid.ColumnSpan="3"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnEnter_Clicked"/>
+
+                    <Button x:Name="Btn4"
+                            Text="4"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="12"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn5"
+                            Text="5"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="13"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn6"
+                            Text="6"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="1"
+                            Grid.Column="14"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+                    <!-- /Second Row -->
+
+                    <!-- Third Row -->
+                    <Button x:Name="BtnZ"
+                            Text="Z"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnX"
+                            Text="X"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnC"
+                            Text="C"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnV"
+                            Text="V"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnB"
+                            Text="B"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnN"
+                            Text="N"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="5"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnM"
+                            Text="M"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="6"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnDot"
+                            Text="."
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="7"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnLine"
+                            Text="-"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="8"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="BtnSpace"
+                            Text="Space"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="9"
+                            Grid.ColumnSpan="3"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnSpace_Clicked"/>
+
+                    <Button x:Name="Btn3"
+                            Text="3"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="12"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn2"
+                            Text="2"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="13"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+
+                    <Button x:Name="Btn1"
+                            Text="1"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="2"
+                            Grid.Column="14"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnKey_Clicked"/>
+                    <!-- /Third Row -->
+
+                    <Button x:Name="BtnExitKeyboard"
+                            Text="⚷"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="15"
+                            Margin="-2"
+                            BackgroundColor="{Binding ButtonColor}"
+                            Clicked="BtnExitKeyboard_Clicked"/>
+                </Grid>
+            </AbsoluteLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

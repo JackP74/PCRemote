@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             x:Class="PcRemote.Views.ServerPage"
+             BackgroundColor="{Binding BackGround}">
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Grid RowSpacing="0"
+                  ColumnSpacing="0">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Label Text="{Binding LabelStatusText}"
+                       x:Name="labelStatus"
+                       Margin="2,0,0,5"
+                       FontSize="Small"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       TextColor="{Binding ForeGround}"/>
+
+                <Button Text="Show" 
+                        Grid.Column="0"
+                        Grid.Row="1" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Show_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Hide" 
+                        Grid.Column="1"
+                        Grid.Row="1" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Hide_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Kill Active Window" 
+                        Grid.Column="0"
+                        Grid.Row="2" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="KillActiveWindow_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Shutdown" 
+                        Grid.Column="1"
+                        Grid.Row="2" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Shutdown_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Volume Up" 
+                        Grid.Column="0"
+                        Grid.Row="3" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="VolumeUp_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Volume Down" 
+                        Grid.Column="1"
+                        Grid.Row="3" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="VolumeDown_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Screen On" 
+                        Grid.Column="0"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="ScreenOn_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button Text="Screen Off" 
+                        Grid.Column="1"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="ScreenOff_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

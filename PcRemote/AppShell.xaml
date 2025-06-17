@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PcRemote.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PcRemote"
+    xmlns:views="clr-namespace:PcRemote.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Title="PcRemote">
+
+    <TabBar>
+        <Tab Title="Home">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
+        <Tab Title="Server">
+            <ShellContent ContentTemplate="{DataTemplate views:ServerPage}" />
+        </Tab>
+        <Tab Title="PMedia">
+            <ShellContent ContentTemplate="{DataTemplate views:PmpPage}" />
+        </Tab>
+        <Tab Title="Raw">
+            <ShellContent ContentTemplate="{DataTemplate views:RawPage}" />
+        </Tab>
+        <Tab Title="PC">
+            <ShellContent ContentTemplate="{DataTemplate views:ImagePage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             x:Class="PcRemote.Views.PmpPage"
+             BackgroundColor="{Binding BackGround}">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid RowSpacing="0"
+                  ColumnSpacing="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+    
+                <Button x:Name="btnPlay" 
+                        Text="Play"
+                        Grid.Column="0"
+                        Grid.Row="0" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Play_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnPause" 
+                        Text="Pause" 
+                        Grid.Column="1"
+                        Grid.Row="0" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Pause_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnForward" 
+                        Text="Forward"
+                        Grid.Column="0"
+                        Grid.Row="1" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Forward_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnBackward" 
+                        Text="Backward" 
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Backward_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnNext" 
+                        Text="Next"
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Next_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnPrevious" 
+                        Text="Previous" 
+                        Grid.Column="1"
+                        Grid.Row="2" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Previous_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+                    
+                <Button x:Name="btnVolumeUp" 
+                        Text="Volume Up"
+                        Grid.Column="0"
+                        Grid.Row="3" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="VolumeUp_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button x:Name="btnVolumeDown" 
+                        Text="Volume Down"
+                        Grid.Column="1"
+                        Grid.Row="3" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="VolumeDown_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button x:Name="btnMute" 
+                        Text="Mute" 
+                        Grid.Column="0"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="Mute_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+                <Button x:Name="btnAutoPlay" 
+                        Text="AutoPlay" 
+                        Grid.Column="1"
+                        Grid.Row="4" 
+                        Margin="5,5,5,0"
+                        Padding="0,0,0,0"
+                        Clicked="btnAutoPlay_Clicked"
+                        BackgroundColor="{Binding ButtonColor}"/>
+
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
